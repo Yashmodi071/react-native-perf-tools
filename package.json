@@ -1,9 +1,17 @@
 {
   "name": "react-native-perf-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Performance and debugging toolkit for React Native",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "react-native",
     "performance",
@@ -11,6 +19,15 @@
     "memo",
     "hooks"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YashModi/react-native-perf-tools.git"
+  },
+  "homepage": "https://github.com/Yashmodi071/react-native-perf-tools",
+  "bugs": {
+    "url": "https://github.com/Yashmodi071/react-native-perf-tools/issues"
+  },
+
   "author": "Yash Modi",
   "license": "MIT",
   "type": "commonjs",
