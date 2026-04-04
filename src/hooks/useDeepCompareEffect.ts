@@ -1,17 +1,17 @@
 import { useEffect, useRef } from 'react';
 import isEqual from 'fast-deep-equal';
 
-export function useSmartEffect(
+export function useDeepCompareEffect(
   effect: () => void | (() => void),
   deps: any[]
 ) {
-  const prevDeps = useRef<any[] | undefined>(undefined);
+  const prev = useRef<any[] | undefined>(undefined);
 
-  if (!isEqual(prevDeps.current, deps)) {
-    prevDeps.current = deps;
+  if (!isEqual(prev.current, deps)) {
+    prev.current = deps;
   }
 
   useEffect(() => {
     return effect();
-  }, [prevDeps.current]);
+  }, [prev.current]);
 }

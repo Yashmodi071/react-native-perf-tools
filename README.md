@@ -60,130 +60,198 @@ export default smartMemo(Demo, {
 
 ---
 
-## 🔥 Features
+# 🔥 Features
 
-* ⚡ **smartMemo** → Advanced `React.memo` with debug logs
-* 🔍 **useWhyDidYouRender** → Track why component re-rendered
-* 🔢 **useRenderCount** → Monitor render count
-* 🧠 **useSmartMemo** → Deep dependency comparison
-* 🔁 **useSmartCallback** → Stable callbacks
-* 🎯 **useSmartEffect** → Prevent unnecessary effects
+### Core Performance
+
+* ⚡ **smartMemo** → Advanced `React.memo`
+* 🧠 **useSmartMemo** → Deep dependency memoization
+* 🔁 **useSmartCallback** → Stable function references
+* 🎯 **useSmartEffect** → Optimized effect execution
+
+### Debugging
+
+* 🔍 **useWhyDidYouRender** → Detect unnecessary renders
+* 🔢 **useRenderCount** → Track render frequency
+
+### New Hooks (v1.1.0)
+
+* 🧭 **usePrevious** → Access previous value
+* ⏱ **useDebounce** → Delay value updates
+* 🧊 **useStableValue** → Prevent object re-creation
+* 🧪 **useDeepCompareEffect** → Deep dependency effect
 
 ---
 
-## 🧠 API
+# 🧠 API + EXAMPLES
 
-### smartMemo
+---
 
-```ts
-smartMemo(Component, {
-  deepCompare?: boolean,
-  debug?: boolean,
-  ignoreProps?: string[]
-})
+## ⚡ smartMemo
+
+```tsx
+const Optimized = smartMemo(Component, {
+  deepCompare: true,
+  debug: true,
+  ignoreProps: ['style'],
+});
 ```
 
+👉 Prevent unnecessary re-renders with smart comparison
+
 ---
 
-### useWhyDidYouRender
+## 🔍 useWhyDidYouRender
 
-```ts
-useWhyDidYouRender(name, props)
+```tsx
+useWhyDidYouRender('ProfileCard', props);
 ```
 
+👉 Logs which props changed
+
 ---
 
-### useRenderCount
+## 🔢 useRenderCount
 
-```ts
-const count = useRenderCount()
+```tsx
+const count = useRenderCount();
+<Text>Render: {count}</Text>
 ```
 
+👉 Track how many times component renders
+
 ---
 
-### useSmartMemo
+## 🧠 useSmartMemo
 
-```ts
-const value = useSmartMemo(data, [deps])
+```tsx
+const filteredList = useSmartMemo(list, [list]);
 ```
 
+👉 Avoid expensive recalculations
+
 ---
 
-### useSmartCallback
+## 🔁 useSmartCallback
 
-```ts
-const callback = useSmartCallback(fn, [deps])
+```tsx
+const handleClick = useSmartCallback(() => {
+  console.log('clicked');
+}, []);
 ```
 
+👉 Prevent callback recreation
+
 ---
 
-### useSmartEffect
+## 🎯 useSmartEffect
 
-```ts
-useSmartEffect(effect, [deps])
+```tsx
+useSmartEffect(() => {
+  fetchData();
+}, [filters]);
 ```
 
+👉 Runs only when deps truly change
+
 ---
 
-## 🧪 Example Output
+# 🆕 NEW HOOKS
+
+---
+
+## 🧭 usePrevious
+
+```tsx
+const prevValue = usePrevious(value);
+
+console.log('Previous:', prevValue);
+```
+
+👉 Compare previous vs current value
+
+---
+
+## ⏱ useDebounce
+
+```tsx
+const debouncedSearch = useDebounce(search, 500);
+```
+
+👉 Useful for API calls / search input
+
+---
+
+## 🧊 useStableValue
+
+```tsx
+const stableUser = useStableValue(user);
+```
+
+👉 Prevent unnecessary re-renders from object changes
+
+---
+
+## 🧪 useDeepCompareEffect
+
+```tsx
+useDeepCompareEffect(() => {
+  fetchData();
+}, [filters]);
+```
+
+👉 Deep compare dependencies
+
+---
+
+# 🧪 Example Output
 
 ```bash
 [PerfTools] Re-render: { count: { from: 1, to: 2 } }
-[PerfTools] [WhyDidYouRender] DemoComponent { count: {...} }
+[PerfTools] [WhyDidYouRender] ProfileCard { name: {...} }
 ```
 
 ---
 
-## 🎯 Use Cases
+# 🎯 Real Use Cases
 
 * Optimize FlatList performance
-* Debug unnecessary re-renders
+* Debug re-render issues
+* Prevent unnecessary API calls
 * Improve app responsiveness
-* Track component lifecycle behavior
+* Handle complex dependency objects
 
 ---
 
-## 📸 Demo (Recommended)
-
-👉 Add screenshots or GIF here
-
-Example:
-
-* Render count tracking
-* Console debug logs
-* FlatList optimization
-
----
-
-## ⚙️ Compatibility
+# ⚙️ Compatibility
 
 * React Native ≥ 0.70
 * React ≥ 17
 
 ---
 
-## 📄 License
+# 📄 License
 
 MIT
 
 ---
 
-## 👨‍💻 Author
+# 👨‍💻 Author
 
 Yash Modi
 
 ---
 
-## ⭐ Support
+# ⭐ Support
 
-If you like this project:
+If you find this useful:
 
-👉 Give it a star on GitHub
-👉 Share with other developers
+👉 ⭐ Star the repo
+👉 🔁 Share with dev community
 
 ---
 
-## 🚀 Roadmap
+# 🚀 Roadmap
 
 * [ ] FlatList advanced optimization
 * [ ] Performance analytics

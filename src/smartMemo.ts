@@ -36,12 +36,15 @@ export function smartMemo<T>(
 }
 
 function filterProps(props: any, ignore: string[]) {
+  const ignoreSet = new Set(ignore);
   const newProps: any = {};
+
   Object.keys(props || {}).forEach((key) => {
-    if (!ignore.includes(key)) {
+    if (!ignoreSet.has(key)) {
       newProps[key] = props[key];
     }
   });
+
   return newProps;
 }
 
