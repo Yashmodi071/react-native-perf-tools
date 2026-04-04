@@ -23,9 +23,10 @@ function smartMemo(Component, options = {}) {
     });
 }
 function filterProps(props, ignore) {
+    const ignoreSet = new Set(ignore);
     const newProps = {};
     Object.keys(props || {}).forEach((key) => {
-        if (!ignore.includes(key)) {
+        if (!ignoreSet.has(key)) {
             newProps[key] = props[key];
         }
     });
