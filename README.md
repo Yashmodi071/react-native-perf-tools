@@ -1,39 +1,63 @@
 # 🚀 react-native-perf-tools
 
-![npm](https://img.shields.io/npm/v/react-native-perf-tools)
-![downloads](https://img.shields.io/npm/dm/react-native-perf-tools)
-![license](https://img.shields.io/npm/l/react-native-perf-tools)
-![stars](https://img.shields.io/github/stars/Yashmodi071/react-native-perf-tools?style=social)
-
-> ⚡ Performance & Debugging Toolkit for React Native
+<div align="center">
+  <p><strong>A comprehensive performance & debugging toolkit for React Native.</strong></p>
+  
+  [![npm version](https://img.shields.io/npm/v/react-native-perf-tools.svg?style=flat-square)](https://www.npmjs.com/package/react-native-perf-tools)
+  [![npm downloads](https://img.shields.io/npm/dm/react-native-perf-tools.svg?style=flat-square)](https://www.npmjs.com/package/react-native-perf-tools)
+  [![license](https://img.shields.io/npm/l/react-native-perf-tools.svg?style=flat-square)](https://github.com/Yashmodi071/react-native-perf-tools/blob/main/LICENSE)
+  [![stars](https://img.shields.io/github/stars/Yashmodi071/react-native-perf-tools?style=flat-square)](https://github.com/Yashmodi071/react-native-perf-tools/stargazers)
+</div>
 
 ---
 
-## ✨ Overview
+`react-native-perf-tools` is designed to help you detect, debug, and fix performance bottlenecks in your React Native applications. 
 
-`react-native-perf-tools` helps you detect and fix performance issues in React Native apps.
+Most React Native apps suffer from **unnecessary re-renders**, **hard-to-debug performance drops**, and **inefficient hooks usage**. This library provides specialized hooks and Higher-Order Components (HOCs) to track rendering behavior and optimize it effortlessly.
 
-Most apps suffer from:
+## ✨ Features
 
-* ❌ Unnecessary re-renders
-* ❌ Hard-to-debug performance issues
-* ❌ Inefficient hooks usage
+### ⚡ Core Optimization
+* **`smartMemo`** — Advanced `React.memo` with deep comparison support.
+* **`useSmartMemo`** — Deep dependency memoization to prevent expensive recalculations.
+* **`useSmartCallback`** — Stable function references that don't trigger re-renders.
+* **`useSmartEffect`** — Optimized effect execution running only when dependencies truly change.
 
-👉 This library gives you tools to **track, debug, and optimize rendering behavior**
+### 🔍 Debugging & Tracking
+* **`useWhyDidYouRender`** — Detect exactly which prop changes caused a re-render.
+* **`useRenderCount`** — Track the frequency of component updates.
+
+### 🛠 Utility Hooks
+* **`usePrevious`** — Access the previous value of a state or prop.
+* **`useDebounce`** — Delay value updates (great for search inputs and API calls).
+* **`useStableValue`** — Prevent object re-creation between renders.
+* **`useDeepCompareEffect`** — Execute effects based on deep comparison of dependencies.
 
 ---
 
 ## 📦 Installation
 
+Install via npm:
+
 ```bash
 npm install react-native-perf-tools
 ```
 
+Or via yarn:
+
+```bash
+yarn add react-native-perf-tools
+```
+
 ---
 
-## 🚀 Quick Example
+## 🚀 Quick Start
+
+Here's an example of how you can integrate multiple tools to debug and optimize a component simultaneously.
 
 ```tsx
+import React from 'react';
+import { Text, View } from 'react-native';
 import {
   smartMemo,
   useWhyDidYouRender,
@@ -41,221 +65,162 @@ import {
   useSmartEffect,
 } from 'react-native-perf-tools';
 
-const Demo = (props) => {
+const UserProfile = (props) => {
+  // 1. Track how many times this component renders
   const renderCount = useRenderCount();
 
-  useWhyDidYouRender('DemoComponent', props);
+  // 2. Find out exactly WHY it re-rendered
+  useWhyDidYouRender('UserProfile', props);
 
+  // 3. Run an effect only when props actually change (deep comparison)
   useSmartEffect(() => {
-    console.log('Effect triggered 🚀');
+    console.log('User profile props deeply changed! 🚀');
   }, [props]);
 
-  return <Text>Render Count: {renderCount}</Text>;
+  return (
+    <View>
+      <Text>Render Count: {renderCount}</Text>
+    </View>
+  );
 };
 
-export default smartMemo(Demo, {
-  debug: true,
-});
-```
-
----
-
-# 🔥 Features
-
-### Core Performance
-
-* ⚡ **smartMemo** → Advanced `React.memo`
-* 🧠 **useSmartMemo** → Deep dependency memoization
-* 🔁 **useSmartCallback** → Stable function references
-* 🎯 **useSmartEffect** → Optimized effect execution
-
-### Debugging
-
-* 🔍 **useWhyDidYouRender** → Detect unnecessary renders
-* 🔢 **useRenderCount** → Track render frequency
-
-### New Hooks (v1.1.0)
-
-* 🧭 **usePrevious** → Access previous value
-* ⏱ **useDebounce** → Delay value updates
-* 🧊 **useStableValue** → Prevent object re-creation
-* 🧪 **useDeepCompareEffect** → Deep dependency effect
-
----
-
-# 🧠 API + EXAMPLES
-
----
-
-## ⚡ smartMemo
-
-```tsx
-const Optimized = smartMemo(Component, {
+// 4. Wrap with smartMemo to prevent unnecessary renders based on deep comparison
+export default smartMemo(UserProfile, {
   deepCompare: true,
   debug: true,
-  ignoreProps: ['style'],
 });
 ```
 
-👉 Prevent unnecessary re-renders with smart comparison
-
 ---
 
-## 🔍 useWhyDidYouRender
+## 📚 API Reference
+
+### Optimization Tools
+
+#### `smartMemo(Component, options)`
+An advanced alternative to `React.memo`.
 
 ```tsx
-useWhyDidYouRender('ProfileCard', props);
+const OptimizedComponent = smartMemo(MyComponent, {
+  deepCompare: true, // Deeply compare props instead of shallow
+  debug: true,       // Log when rendering is prevented
+  ignoreProps: ['style', 'onPress'], // Ignore specific props during comparison
+});
 ```
 
-👉 Logs which props changed
-
----
-
-## 🔢 useRenderCount
+#### `useSmartMemo(factory, deps)`
+Memoizes a value using deep comparison of its dependencies.
 
 ```tsx
-const count = useRenderCount();
-<Text>Render: {count}</Text>
+const filteredData = useSmartMemo(() => filterLargeList(data), [data, query]);
 ```
 
-👉 Track how many times component renders
-
----
-
-## 🧠 useSmartMemo
+#### `useSmartCallback(callback, deps)`
+Returns a stable callback function.
 
 ```tsx
-const filteredList = useSmartMemo(list, [list]);
+const handlePress = useSmartCallback(() => {
+  console.log('Button pressed', id);
+}, [id]);
 ```
 
-👉 Avoid expensive recalculations
-
----
-
-## 🔁 useSmartCallback
-
-```tsx
-const handleClick = useSmartCallback(() => {
-  console.log('clicked');
-}, []);
-```
-
-👉 Prevent callback recreation
-
----
-
-## 🎯 useSmartEffect
+#### `useSmartEffect(effect, deps)`
+Runs the effect only when the dependencies have deeply changed.
 
 ```tsx
 useSmartEffect(() => {
-  fetchData();
-}, [filters]);
+  fetchUserDetails(user.id);
+}, [user]);
 ```
 
-👉 Runs only when deps truly change
+### Debugging Tools
 
----
-
-# 🆕 NEW HOOKS
-
----
-
-## 🧭 usePrevious
+#### `useWhyDidYouRender(componentName, props)`
+Logs the exact props that triggered a re-render.
 
 ```tsx
-const prevValue = usePrevious(value);
-
-console.log('Previous:', prevValue);
+useWhyDidYouRender('MyComponent', props);
+```
+**Example Output:**
+```
+[PerfTools] [WhyDidYouRender] MyComponent { name: { from: "Alice", to: "Bob" } }
 ```
 
-👉 Compare previous vs current value
-
----
-
-## ⏱ useDebounce
+#### `useRenderCount()`
+Returns the number of times the component has rendered.
 
 ```tsx
-const debouncedSearch = useDebounce(search, 500);
+const count = useRenderCount();
+console.log(`Rendered ${count} times`);
 ```
 
-👉 Useful for API calls / search input
+### Utility Hooks
 
----
-
-## 🧊 useStableValue
+#### `usePrevious(value)`
+Returns the value from the previous render cycle.
 
 ```tsx
-const stableUser = useStableValue(user);
+const prevSearch = usePrevious(searchQuery);
 ```
 
-👉 Prevent unnecessary re-renders from object changes
+#### `useDebounce(value, delay)`
+Debounces a rapidly changing value.
 
----
+```tsx
+const debouncedSearch = useDebounce(searchQuery, 500);
+```
 
-## 🧪 useDeepCompareEffect
+#### `useStableValue(value)`
+Returns a stable reference to an object, preventing re-creation if the contents haven't changed.
+
+```tsx
+const stableConfig = useStableValue({ theme: 'dark', id: 1 });
+```
+
+#### `useDeepCompareEffect(effect, deps)`
+Identical to `useEffect`, but uses deep comparison for dependencies.
 
 ```tsx
 useDeepCompareEffect(() => {
-  fetchData();
-}, [filters]);
-```
-
-👉 Deep compare dependencies
-
----
-
-# 🧪 Example Output
-
-```bash
-[PerfTools] Re-render: { count: { from: 1, to: 2 } }
-[PerfTools] [WhyDidYouRender] ProfileCard { name: {...} }
+  syncData();
+}, [complexNestedObject]);
 ```
 
 ---
 
-# 🎯 Real Use Cases
+## 🎯 Real-World Use Cases
 
-* Optimize FlatList performance
-* Debug re-render issues
-* Prevent unnecessary API calls
-* Improve app responsiveness
-* Handle complex dependency objects
-
----
-
-# ⚙️ Compatibility
-
-* React Native ≥ 0.70
-* React ≥ 17
+- **FlatList Optimization:** Prevent list items from continuously re-rendering when parent state changes.
+- **Form Inputs:** Use `useDebounce` to prevent API spam while typing.
+- **Complex State:** Use `useStableValue` and `useDeepCompareEffect` when dealing with nested API responses.
+- **Debugging Ghost Renders:** Drop `useWhyDidYouRender` into any component to instantly see what's causing layout thrashing.
 
 ---
 
-# 📄 License
+## ⚙️ Compatibility
 
-MIT
-
----
-
-# 👨‍💻 Author
-
-Yash Modi
+- React Native `>= 0.70`
+- React `>= 17`
 
 ---
 
-# ⭐ Support
+## 🚀 Roadmap
 
-If you find this useful:
-
-👉 ⭐ Star the repo
-👉 🔁 Share with dev community
-
----
-
-# 🚀 Roadmap
-
-* [ ] FlatList advanced optimization
-* [ ] Performance analytics
-* [ ] DevTools integration
-* [ ] Debug overlay UI
+- [ ] FlatList advanced optimization wrappers
+- [ ] Automated performance analytics and scoring
+- [ ] Flipper / React Native Debugger integration
+- [ ] On-device debug overlay UI
 
 ---
+
+## 👨‍💻 Author
+
+Created with ❤️ by **Yash Modi**.
+
+If you find this library useful, please consider:
+- ⭐️ Starring the [GitHub repository](https://github.com/Yashmodi071/react-native-perf-tools)
+- 📢 Sharing it with the React Native community
+
+## 📄 License
+
+This project is licensed under the MIT License.
